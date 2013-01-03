@@ -16,7 +16,7 @@ orange = "#ff5500"
 blue = "#0000ff"
 purple = "#00ffff"
 
-current_color = None
+current_color = "#666666"
 
 f = open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"config.yaml"))
 config = yaml.load(f)
@@ -37,7 +37,7 @@ def set_light(color="off",count=1):
     global current_color
     #if color != current_color:
     for k in range(1,count+1,2):
-        discarded = commands.getoutput('usblamp off; sleep 0.2; usblamp "' + color + '"')
+        discarded = commands.getoutput('usblamp -d 250 "'+current_color+'" "'+color+'"')
     current_color = color
 
 # build request, auth'd if necessary
