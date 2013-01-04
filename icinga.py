@@ -14,7 +14,8 @@ red = "#ff0000"
 green = "#00ff00"
 orange = "#ff5500"
 blue = "#0000ff"
-purple = "#00ffff"
+purple = "#ff00ff"
+darkgreen = "#003300"
 
 current_color = "#666666"
 
@@ -37,7 +38,7 @@ def set_light(color="off",count=1):
     global current_color
     #if color != current_color:
     for k in range(1,count+1,2):
-        discarded = commands.getoutput('usblamp -d 250 "'+current_color+'" "'+color+'"')
+        discarded = commands.getoutput('usblamp -d 1000 "'+current_color+'" "'+color+'"')
     current_color = color
 
 # build request, auth'd if necessary
@@ -81,7 +82,7 @@ while True:
         set_light(color=purple,count=services_unknown_unack)
     else:
         debug("all is well")
-        set_light(color="off")
+        set_light(color=darkgreen)
 
     sleep(interval)
 
