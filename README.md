@@ -1,8 +1,7 @@
 icinga-light
 ============
+icinga-light provides you with a at-a-glance status of your Icinga monitoring in glorious colour.
 
-Python script(s) to interface with @daniel-git 's usblamp interface and display quick stats from icinga in glorious colour.
+It's a simple python script that interfaces your Icinga installation with @daniel-git's usblamp interface to a USB Webmail Notifier (from Gadgetree or Dream Cheeky).
 
-Requires http://daniel-git.github.com/usblamp/ to be installed somewhere in $PATH, and a USB Webmail Notifier from Gadgetree or Dream Cheeky hooked up to a USB port.
-
-Also, probably linux, as Windows has a separate executable to interface with the Webmail Notifier.
+Requires http://daniel-git.github.com/usblamp/ to be installed somewhere in $PATH.
