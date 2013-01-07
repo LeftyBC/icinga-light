@@ -6,6 +6,7 @@ import simplejson
 import commands
 import yaml
 import os
+import datetime
 from time import sleep
 
 debug = False
@@ -18,7 +19,6 @@ purple = "#ff00ff"
 darkgreen = "#003300"
 
 current_color = "#666666"
-
 
 def debug(msg):
     global debug
@@ -35,7 +35,7 @@ def set_light(color="off", count=1):
     current_color = color
 
 
-def run():
+def poll_icinga():
     f = open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                           "config.yaml"))
     config = yaml.load(f)
@@ -92,6 +92,6 @@ def run():
     # end while
 
 
-def main():
-    if __name__ == "__main__":
-        run()
+if __name__ == "__main__":
+    print "In AD %d, icinga polling was beginning." % datetime.datetime.now().year
+    poll_icinga()
