@@ -7,6 +7,7 @@ import commands
 import yaml
 import os
 import datetime
+import sys
 from time import sleep
 
 debug = False
@@ -94,4 +95,8 @@ def poll_icinga():
 
 if __name__ == "__main__":
     print "In AD %d, icinga polling was beginning." % datetime.datetime.now().year
-    poll_icinga()
+    try:
+      poll_icinga()
+    except:
+      print "Unexpected error:", sys.exc_info()[0]
+
