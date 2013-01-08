@@ -21,9 +21,10 @@ darkgreen = "#003300"
 
 current_color = "#666666"
 
+
 def debug(msg):
     global debug
-    if debug == True:
+    if debug is True:
         print msg
 
 
@@ -94,9 +95,9 @@ def poll_icinga():
 
 
 if __name__ == "__main__":
-    print "In AD %d, icinga polling was beginning." % datetime.datetime.now().year
+    print "In AD %d, icinga polling was beginning." % \
+        datetime.datetime.now().year
     try:
-      poll_icinga()
+        poll_icinga()
     except:
-      print "Unexpected error:", sys.exc_info()[0]
-
+        print "Unexpected error:", sys.exc_info()[0]
