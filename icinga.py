@@ -7,6 +7,7 @@ import commands
 import yaml
 import os
 import datetime
+import sys
 from time import sleep
 
 debug = False
@@ -20,9 +21,10 @@ darkgreen = "#003300"
 
 current_color = "#666666"
 
+
 def debug(msg):
     global debug
-    if debug == True:
+    if debug is True:
         print msg
 
 
@@ -93,5 +95,9 @@ def poll_icinga():
 
 
 if __name__ == "__main__":
-    print "In AD %d, icinga polling was beginning." % datetime.datetime.now().year
-    poll_icinga()
+    print "In AD %d, icinga polling was beginning." % \
+        datetime.datetime.now().year
+    try:
+        poll_icinga()
+    except:
+        print "Unexpected error:", sys.exc_info()[0]
