@@ -18,6 +18,7 @@ orange = "#ff5500"
 blue = "#0000ff"
 purple = "#ff00ff"
 darkgreen = "#003300"
+off = "off"
 
 current_color = "#666666"
 
@@ -33,7 +34,7 @@ def set_light(color="off", count=1):
     #if color != current_color:
     for k in range(1, count + 1, 2):
         discarded = commands.getoutput("usblamp -d 1000 \"%s\" \"%s\"" %
-                                       (current_color, color))
+                                       (off, color))
     current_color = color
 
 
@@ -56,41 +57,47 @@ def poll_icinga():
         request.add_header("Authorization", "Basic %s" % base64string)
 
     while True:
-        debug("Loading " + url)
-        result = urllib2.urlopen(request)
-        json = simplejson.load(result)
+        try:
+            debug("Loading " + url)
+            result = urllib2.urlopen(request)
+            json = simplejson.load(result)
 
-        jvars = json["tac"]["tac_overview"]
+            jvars = json["tac"]["tac_overview"]
 
-        host_pct = jvars["percent_host_health"]
-        service_pct = jvars["percent_service_health"]
+            host_pct = jvars["percent_host_health"]
+            service_pct = jvars["percent_service_health"]
 
-        services_warning = jvars["services_warning"]
-        services_warning_unack = jvars["services_warning_unacknowledged"]
-        services_critical = jvars["services_critical"]
-        services_critical_unack = jvars["services_critical_unacknowledged"]
-        services_unknown = jvars["services_unknown"]
-        services_unknown_unack = jvars["services_unknown_unacknowledged"]
+            services_warning = jvars["services_warning"]
+            services_warning_unack = jvars["services_warning_unacknowledged"]
+            services_critical = jvars["services_critical"]
+            services_critical_unack = jvars["services_critical_unacknowledged"]
+            services_unknown = jvars["services_unknown"]
+            services_unknown_unack = jvars["services_unknown_unacknowledged"]
 
-        hosts_down_unack = jvars["hosts_down_unacknowledged"]
+            hosts_down_unack = jvars["hosts_down_unacknowledged"]
 
-        if services_critical_unack > 0:
-            debug("crit srv: " + str(services_critical_unack))
-            set_light(color=red, count=services_critical_unack)
-        elif services_warning_unack > 0:
-            debug("warn srv: " + str(services_warning_unack))
-            set_light(color=orange, count=services_warning_unack)
-        elif hosts_down_unack > 0:
-            debug("hosts down: " + str(hosts_down_unack))
-            set_light(color=blue, count=hosts_down_unack)
-        elif services_unknown_unack > 0:
-            debug("services unknown: " + str(services_unknown_unack))
-            set_light(color=purple, count=services_unknown_unack)
-        else:
-            debug("all is well")
-            set_light(color=darkgreen)
+            if services_critical_unack > 0:
+                debug("crit srv: " + str(services_critical_unack))
+                set_light(color=red, count=services_critical_unack)
+            elif services_warning_unack > 0:
+                debug("warn srv: " + str(services_warning_unack))
+                set_light(color=orange, count=services_warning_unack)
+            elif hosts_down_unack > 0:
+                debug("hosts down: " + str(hosts_down_unack))
+                set_light(color=blue, count=hosts_down_unack)
+            elif services_unknown_unack > 0:
+                debug("services unknown: " + str(services_unknown_unack))
+                set_light(color=purple, count=services_unknown_unack)
+            else:
+                debug("all is well")
+                if current_color != darkgreen:
+                    set_light(color=darkgreen)
 
-        sleep(interval)
+            sleep(interval)
+        except urllib2.URLError:
+            print "Error fetching info from %s, retrying in %d seconds." % ( url, interval )
+            sleep(interval)
+
     # end while
 
 
@@ -99,5 +106,5 @@ if __name__ == "__main__":
         datetime.datetime.now().year
     try:
         poll_icinga()
-    except:
-        print "Unexpected error:", sys.exc_info()[0]
+    except Exception as e:
+        print "Unexpected error:", sys.exc_info()[0], e
