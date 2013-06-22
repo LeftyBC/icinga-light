@@ -2,3 +2,4 @@ username: myuser
 password: mypassword
 icinga_baseurl: https://icinga.myhost.com/icinga
 interval: 30
+cylon_mode: false
